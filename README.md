@@ -71,9 +71,24 @@ Telas inspiradas no **Oficina Inteligente** (OI), simplificadas:
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # saída em dist/
+npm run build    # saída em dist/ (base / — não use no GitHub Pages)
+npm run build:pages  # GitHub Pages em /laestoque/
 npm run preview  # preview da build
 ```
+
+### Publicar no GitHub Pages
+
+URL: [https://lucasweb2025.github.io/laestoque/](https://lucasweb2025.github.io/laestoque/)
+
+**Tela branca?** O build normal (`npm run build`) aponta assets para `/` — no Pages o app fica em `/laestoque/`. Use sempre:
+
+```bash
+npm run build:pages
+```
+
+No repositório, o workflow `.github/workflows/deploy-pages.yml` faz isso automaticamente a cada push em `main`. Em **Settings → Pages**, fonte: **GitHub Actions** (não envie `dist` manual com `npm run build`).
+
+Rotas usam hash (`#/chegada`) para funcionar sem servidor.
 
 ### Demonstração para o gestor
 
