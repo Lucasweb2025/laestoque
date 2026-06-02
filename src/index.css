@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-sidebar: #071018;
+  --color-sidebar-elevated: #0d1520;
+  --color-sidebar-hover: #152033;
+  --color-sidebar-border: #1e2d42;
+  --color-sidebar-text: #7d8da6;
+  --color-sidebar-text-active: #f8fafc;
+  --color-sidebar-accent: #3b82f6;
+
+  --color-topbar: #ffffff;
+  --color-main: #eef2f6;
+  --color-card: #ffffff;
+  --color-border: #d8e0ea;
+  --color-border-subtle: #e8edf3;
+
+  --color-title: #041e42;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #5c6b7f;
+
+  --color-primary: #1e40af;
+  --color-primary-hover: #1e3a8a;
+  --color-primary-muted: #eff6ff;
+
+  --color-action-entrada: #047857;
+  --color-action-entrada-hover: #065f46;
+  --color-action-saida: #b91c1c;
+  --color-action-saida-hover: #991b1b;
+
+  --color-success-bg: #ecfdf5;
+  --color-success-border: #6ee7b7;
+  --color-success-text: #065f46;
+
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fca5a5;
+  --color-danger-text: #991b1b;
+
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #92400e;
+
+  --shadow-xs: 0 1px 2px rgb(4 30 66 / 0.04);
+  --shadow-card: 0 1px 3px rgb(4 30 66 / 0.06), 0 0 0 1px rgb(4 30 66 / 0.03);
+  --shadow-card-hover: 0 8px 24px -4px rgb(4 30 66 / 0.1);
+  --shadow-topbar: 0 1px 0 rgb(4 30 66 / 0.06);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', 'Consolas', ui-monospace, monospace;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  color: var(--color-text-primary);
+  background-color: var(--color-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background-color: #dbeafe;
+  color: #041e42;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
