@@ -7,6 +7,12 @@ const rotas = {
   '/saida': ['Início', 'Supply Chain', 'Estoque', 'Saída / consumo'],
   '/produtos/novo': ['Início', 'Supply Chain', 'Estoque', 'Novo produto'],
   '/inventario': ['Início', 'Supply Chain', 'Estoque', 'Inventário inicial'],
+  '/auditoria': ['Início', 'Supply Chain', 'Estoque', 'Auditoria geral'],
+  '/envio-unidade': ['Início', 'Supply Chain', 'Estoque', 'Envio para unidade'],
+  '/relatorio/envios': ['Início', 'Supply Chain', 'Estoque', 'Envios por unidade'],
+  '/produtos/localizacao': ['Início', 'Supply Chain', 'Estoque', 'Localização no estoque'],
+  '/solicitacao-reposicao': ['Início', 'Supply Chain', 'Estoque', 'Solicitação de reposição'],
+  '/fornecedores': ['Início', 'Supply Chain', 'Estoque', 'Fornecedores'],
 }
 
 export default function TopBar() {

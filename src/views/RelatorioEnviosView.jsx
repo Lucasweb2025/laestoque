@@ -20,7 +20,7 @@ export default function RelatorioEnviosView() {
         meta="Relatório · Estoque central → unidades"
         actions={
           <>
-            <Button variant="outline" to="/auditoria/envios">
+            <Button variant="outline" to="/auditoria?tipo=envio">
               Ver auditoria
             </Button>
             <Button variant="primary" to="/envio-unidade">

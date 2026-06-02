@@ -15,7 +15,7 @@ export default function UnidadesCard() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
-            to="/auditoria/envios"
+            to="/auditoria?tipo=envio"
             className="text-xs font-semibold text-primary hover:underline"
           >
             Auditoria

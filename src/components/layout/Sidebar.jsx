@@ -77,13 +77,13 @@ export default function Sidebar() {
             </NavIcon>
             Envios por unidade
           </NavLink>
-          <NavLink to="/auditoria/envios" className={navLinkClass}>
+          <NavLink to="/auditoria" className={navLinkClass}>
             <NavIcon>
               <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
                 <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 100-2 1 1 0 000 2zm2-3a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1zm-2 5a1 1 0 100-2 1 1 0 000 2zm5-1a1 1 0 11-2 0 1 1 0 012 0z" clipRule="evenodd" />
               </svg>
             </NavIcon>
-            Auditoria de envios
+            Auditoria geral
           </NavLink>
           <NavLink to="/saida" className={navLinkClass}>
             <NavIcon>
@@ -121,19 +121,14 @@ export default function Sidebar() {
             </NavIcon>
             Localização no estoque
           </NavLink>
-        </div>
-
-        <p className="mb-1.5 px-3 text-[11px] font-semibold text-slate-500">Em breve</p>
-        <div className="space-y-0.5 opacity-40">
-          {['Fornecedores', 'Auditoria geral'].map((item) => (
-            <div
-              key={item}
-              className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-[13px] text-sidebar-text"
-            >
-              <span className="h-7 w-7 shrink-0 rounded bg-white/5" />
-              {item}
-            </div>
-          ))}
+          <NavLink to="/fornecedores" className={navLinkClass}>
+            <NavIcon>
+              <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+              </svg>
+            </NavIcon>
+            Fornecedores
+          </NavLink>
         </div>
       </nav>
 

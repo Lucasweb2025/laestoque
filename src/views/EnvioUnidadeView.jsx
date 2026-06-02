@@ -75,7 +75,7 @@ export default function EnvioUnidadeView() {
         )}.`,
       })
 
-      setTimeout(() => navigate('/auditoria/envios'), 2000)
+      setTimeout(() => navigate('/auditoria?tipo=envio'), 2000)
     } catch (erro) {
       setAlerta({
         tipo: 'erro',

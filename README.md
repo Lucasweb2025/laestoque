@@ -226,7 +226,7 @@ Funções públicas que as views devem usar:
 | `buscarProdutoPorId(id)` | Um produto ou `null` |
 | `obterResumoEstoque()` | `{ total, comEstoque, semEstoque }` |
 | `cadastrarProduto({...})` | Cria produto; opcional `saldoInicial` via `definirSaldoAtual` |
-| `registrarChegadaDeMaterial({ produtoId, quantidade, observacao })` | Entrada — **soma** saldo |
+| `registrarChegadaDeMaterial({ produtoId, quantidade, observacao, fornecedorId? })` | Entrada — **soma** saldo; opcional vínculo com fornecedor |
 | `definirSaldoAtual({ produtoId, saldoNovo, observacao })` | Inventário — **substitui** saldo |
 | `registrarSaidaDeMaterial({ produtoId, quantidade, veiculo, observacao })` | Saída — **subtrai**; valida saldo |
 | `registrarEnvioParaUnidade({ unidadeId, produtoId, quantidade, observacao })` | Envio — **subtrai** central; grava destino |
@@ -237,6 +237,16 @@ Funções públicas que as views devem usar:
 
 **Erros:** funções lançam `Error` com mensagem em português para exibir na UI (`AlertMessage`).
 
+### Fornecedores (`fornecedorService.js`)
+
+Persistência: `localStorage` chave `la-estoque-fornecedores`. Seeds em `data/fornecedoresIniciais.js`.
+
+| Função | Descrição |
+|--------|-----------|
+| `listarFornecedores()` | Lista ordenada por nome |
+| `buscarFornecedorPorId(id)` | Um fornecedor ou `null` |
+| `cadastrarFornecedor({ nome, telefone, email })` | Nome obrigatório; telefone ou e-mail obrigatório |
+
 ---
 
 ## Rotas e telas
@@ -246,7 +256,8 @@ Base path configurável via `VITE_BASE_PATH` (padrão `/`). Definição em `src/
 | Rota | View | Função |
 |------|------|--------|
 | `/` | `HomeView` | KPIs, tabela de produtos, card envios por unidade |
-| `/chegada` | `ChegadaView` | Entrada de material (produto → quantidade) |
+| `/chegada` | `ChegadaView` | Entrada de material (produto → quantidade → fornecedor opcional) |
+| `/fornecedores` | `FornecedoresView` | Cadastro; clique no nome → modal com telefone e e-mail |
 | `/inventario` | `InventarioView` | Definir saldo real (substitui) |
 | `/envio-unidade` | `EnvioUnidadeView` | Unidade → produto → quantidade |
 | `/relatorio/envios` | `RelatorioEnviosView` | Totais enviados por loja |
@@ -370,7 +381,7 @@ Para resetar dados de dev no browser: Application → Local Storage → apagar a
 - Troca de `estoqueService` → `api.js` nas views
 - Estoque **por unidade** (saldo na loja após envio)
 - Upload de **fotos** de produtos
-- Fornecedores na chegada
+- Edição/exclusão de fornecedor (hoje só cadastro e consulta)
 - NF-e / entrada XML
 - Controle de permissões completo por perfil na UI
 - Testes automatizados (`domain/` é prioridade)

@@ -10,6 +10,7 @@ import ProductListItem from '../components/ProductListItem'
 import ProductThumb from '../components/ProductThumb'
 import QuantityField from '../components/QuantityField'
 import SearchField from '../components/SearchField'
+import FornecedorSelect from '../components/FornecedorSelect'
 import { formatarQuantidade, interpretarQuantidade } from '../domain/estoque'
 import {
   buscarProdutos,
@@ -22,6 +23,7 @@ export default function ChegadaView() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [quantidadeTexto, setQuantidadeTexto] = useState('')
   const [observacao, setObservacao] = useState('')
+  const [fornecedorId, setFornecedorId] = useState('')
   const [alerta, setAlerta] = useState(null)
   const [salvando, setSalvando] = useState(false)
 
@@ -31,6 +33,7 @@ export default function ChegadaView() {
     setProdutoSelecionado(null)
     setQuantidadeTexto('')
     setObservacao('')
+    setFornecedorId('')
     setAlerta(null)
   }
 
@@ -54,6 +57,7 @@ export default function ChegadaView() {
         produtoId: produtoSelecionado.id,
         quantidade,
         observacao,
+        fornecedorId,
       })
 
       setAlerta({
@@ -113,6 +117,8 @@ export default function ChegadaView() {
             categoria={produtoSelecionado.categoria}
             label="Quanto chegou?"
           />
+
+          <FornecedorSelect value={fornecedorId} onChange={setFornecedorId} />
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-text-primary">

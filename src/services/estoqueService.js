@@ -1,6 +1,7 @@
 import { produtosIniciais } from '../data/produtosIniciais'
 import { buscarUnidadePorId, unidadesOperacionais } from '../data/unidades'
 import { formatarQuantidade, validarSaldoSuficiente } from '../domain/estoque'
+import { buscarFornecedorPorId } from './fornecedorService'
 
 const CHAVE_PRODUTOS = 'la-estoque-produtos'
 const CHAVE_MOVIMENTOS = 'la-estoque-movimentos'
@@ -84,12 +85,22 @@ export function buscarProdutoPorId(id) {
   return lerProdutos().find((p) => p.id === id) ?? null
 }
 
-export function registrarChegadaDeMaterial({ produtoId, quantidade, observacao = '' }) {
+export function registrarChegadaDeMaterial({
+  produtoId,
+  quantidade,
+  observacao = '',
+  fornecedorId = '',
+}) {
   const produtos = lerProdutos()
   const indice = produtos.findIndex((p) => p.id === produtoId)
 
   if (indice === -1) {
     throw new Error('Produto não encontrado.')
+  }
+
+  const fornecedor = fornecedorId ? buscarFornecedorPorId(fornecedorId) : null
+  if (fornecedorId && !fornecedor) {
+    throw new Error('Fornecedor não encontrado.')
   }
 
   produtos[indice] = {
@@ -103,6 +114,10 @@ export function registrarChegadaDeMaterial({ produtoId, quantidade, observacao =
     produtoId,
     quantidade,
     observacao,
+    ...(fornecedor && {
+      fornecedorId: fornecedor.id,
+      fornecedorNome: fornecedor.nome,
+    }),
   })
 
   return produtos[indice]
@@ -333,36 +348,114 @@ export function registrarPedidoReposicao({
   return produto
 }
 
-/** Auditoria: cada envio do gestor, do mais recente ao mais antigo. */
+export const FILTROS_AUDITORIA = {
+  todos: { label: 'Todos', tipos: null },
+  chegada: { label: 'Chegadas', tipos: ['entrada'] },
+  saida: { label: 'Saídas', tipos: ['saida'] },
+  envio: { label: 'Envios p/ unidade', tipos: ['envio_unidade'] },
+}
+
+const ROTULOS_TIPO_MOVIMENTO = {
+  entrada: 'Chegada',
+  saida: 'Saída / consumo',
+  envio_unidade: 'Envio p/ unidade',
+  estoque_atual: 'Inventário',
+  pedido_reposicao: 'Solicitação reposição',
+  localizacao: 'Localização',
+}
+
+function formatarDataHoraAuditoria(criadoEm) {
+  return new Date(criadoEm).toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+function mapearMovimentoAuditoria(movimento, produtos) {
+  const produto = produtos.find((p) => p.id === movimento.produtoId)
+  const categoria = movimento.produtoCategoria ?? produto?.categoria ?? 'acessorio'
+  const nome = movimento.produtoNome ?? produto?.nome ?? 'Produto removido'
+  const referencia = movimento.produtoReferencia ?? produto?.referencia ?? '—'
+
+  let quantidadeColuna = '—'
+  let detalhe = '—'
+
+  switch (movimento.tipo) {
+    case 'entrada':
+      quantidadeColuna = formatarQuantidade(movimento.quantidade, categoria)
+      detalhe = movimento.fornecedorNome?.trim() || 'Estoque central'
+      break
+    case 'saida':
+      quantidadeColuna = formatarQuantidade(movimento.quantidade, categoria)
+      detalhe = movimento.veiculo?.trim() || 'Consumo no serviço'
+      break
+    case 'envio_unidade':
+      quantidadeColuna = formatarQuantidade(movimento.quantidade, categoria)
+      detalhe = movimento.unidadeNome ?? '—'
+      break
+    case 'estoque_atual':
+      quantidadeColuna = `${formatarQuantidade(movimento.saldoAnterior, categoria)} → ${formatarQuantidade(movimento.saldoNovo, categoria)}`
+      detalhe = 'Ajuste de saldo'
+      break
+    case 'pedido_reposicao':
+      quantidadeColuna = formatarQuantidade(movimento.quantidade, categoria)
+      detalhe = 'Pedido para compras'
+      break
+    case 'localizacao':
+      quantidadeColuna = '—'
+      detalhe = movimento.localizacaoNova ?? '—'
+      break
+    default:
+      break
+  }
+
+  return {
+    id: movimento.id,
+    criadoEm: movimento.criadoEm,
+    dataHoraFormatada: formatarDataHoraAuditoria(movimento.criadoEm),
+    tipo: movimento.tipo,
+    tipoLabel: ROTULOS_TIPO_MOVIMENTO[movimento.tipo] ?? movimento.tipo,
+    produtoNome: nome,
+    produtoReferencia: referencia,
+    quantidadeColuna,
+    detalhe,
+    fornecedorId: movimento.fornecedorId ?? null,
+    observacao: movimento.observacao?.trim() || '—',
+  }
+}
+
+/** Auditoria geral: chegadas, saídas, envios e demais movimentos (mais recente primeiro). */
+export function listarAuditoriaGeral(filtro = 'todos') {
+  const config = FILTROS_AUDITORIA[filtro] ?? FILTROS_AUDITORIA.todos
+  const produtos = lerProdutos()
+
+  return lerMovimentos()
+    .filter((m) => !config.tipos || config.tipos.includes(m.tipo))
+    .map((m) => mapearMovimentoAuditoria(m, produtos))
+}
+
+/** Auditoria só de envios — compatível com relatório por unidade. */
 export function listarAuditoriaEnviosUnidade() {
   const produtos = lerProdutos()
 
   return lerMovimentos()
     .filter((m) => m.tipo === 'envio_unidade')
     .map((m) => {
-      const produto = produtos.find((p) => p.id === m.produtoId)
-      const categoria = m.produtoCategoria ?? produto?.categoria ?? 'acessorio'
-      const nome = m.produtoNome ?? produto?.nome ?? 'Produto removido'
-      const referencia = m.produtoReferencia ?? produto?.referencia ?? '—'
-      const dataHora = new Date(m.criadoEm)
-
+      const linha = mapearMovimentoAuditoria(m, produtos)
       return {
-        id: m.id,
-        criadoEm: m.criadoEm,
-        dataHoraFormatada: dataHora.toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        produtoNome: nome,
-        produtoReferencia: referencia,
+        id: linha.id,
+        criadoEm: linha.criadoEm,
+        dataHoraFormatada: linha.dataHoraFormatada,
+        produtoNome: linha.produtoNome,
+        produtoReferencia: linha.produtoReferencia,
         quantidade: m.quantidade,
-        quantidadeFormatada: formatarQuantidade(m.quantidade, categoria),
+        quantidadeFormatada: linha.quantidadeColuna,
         unidadeNome: m.unidadeNome ?? '—',
         unidadeId: m.unidadeId,
-        observacao: m.observacao?.trim() || '—',
+        observacao: linha.observacao,
       }
     })
 }

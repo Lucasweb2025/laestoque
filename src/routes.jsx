@@ -5,9 +5,11 @@ import InventarioView from './views/InventarioView'
 import LocalizacaoProdutoView from './views/LocalizacaoProdutoView'
 import NovoProdutoView from './views/NovoProdutoView'
 import PedidoReposicaoView from './views/PedidoReposicaoView'
-import AuditoriaEnviosView from './views/AuditoriaEnviosView'
+import AuditoriaGeralView from './views/AuditoriaGeralView'
+import AuditoriaEnviosRedirect from './views/AuditoriaEnviosRedirect'
 import RelatorioEnviosView from './views/RelatorioEnviosView'
 import SaidaView from './views/SaidaView'
+import FornecedoresView from './views/FornecedoresView'
 import { PLATAFORMA } from './config/plataforma'
 
 /**
@@ -19,11 +21,13 @@ export const rotasModuloEstoque = [
   { path: 'chegada', element: <ChegadaView />, rotulo: 'Entrada de material' },
   { path: 'envio-unidade', element: <EnvioUnidadeView />, rotulo: 'Envio para unidade' },
   { path: 'relatorio/envios', element: <RelatorioEnviosView />, rotulo: 'Envios por unidade' },
-  { path: 'auditoria/envios', element: <AuditoriaEnviosView />, rotulo: 'Auditoria de envios' },
+  { path: 'auditoria', element: <AuditoriaGeralView />, rotulo: 'Auditoria geral' },
+  { path: 'auditoria/envios', element: <AuditoriaEnviosRedirect />, rotulo: 'Auditoria de envios' },
   { path: 'saida', element: <SaidaView />, rotulo: 'Saída / consumo' },
   { path: 'produtos/novo', element: <NovoProdutoView />, rotulo: 'Novo produto' },
   { path: 'inventario', element: <InventarioView />, rotulo: 'Inventário inicial' },
   { path: 'produtos/localizacao', element: <LocalizacaoProdutoView />, rotulo: 'Localização no estoque' },
+  { path: 'fornecedores', element: <FornecedoresView />, rotulo: 'Fornecedores' },
   { path: 'solicitacao-reposicao', element: <PedidoReposicaoView />, rotulo: 'Solicitação de reposição' },
 ]
 
