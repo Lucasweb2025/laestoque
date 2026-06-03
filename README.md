@@ -2,6 +2,8 @@
 
 Documentação técnica do frontend de controle de estoque para estética automotiva premium. Este repositório é um **módulo React** pensado para rodar **standalone** hoje e ser **embutido na plataforma principal** depois.
 
+**Demo online (gestor):** [https://lucasweb2025.github.io/laestoque/](https://lucasweb2025.github.io/laestoque/)
+
 > **Estado atual:** UI e regras de negócio completas no browser. Persistência em **localStorage** (sem banco de dados, sem backend em produção). Contrato de API documentado para integração futura.
 
 ---
@@ -10,6 +12,7 @@ Documentação técnica do frontend de controle de estoque para estética automo
 
 | Item | Descrição |
 |------|-----------|
+| **Demo online** | [https://lucasweb2025.github.io/laestoque/](https://lucasweb2025.github.io/laestoque/) — protótipo publicado no GitHub Pages |
 | **Objetivo** | Controlar **entrada**, **saldo**, **distribuição para unidades** e **consumo** de insumos (películas, químicos, acessórios). |
 | **Público da UI** | Funcionários com pouca familiaridade com tecnologia — fluxos visuais, mensagens claras, alvo &lt; 30 s por operação. |
 | **Estoque numérico** | Apenas no **estoque central** (LaCustom). Unidades recebem **histórico de envios**; saldo por loja é fase futura. |
