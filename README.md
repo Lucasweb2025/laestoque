@@ -80,13 +80,21 @@ npm run preview  # preview da build
 
 URL: [https://lucasweb2025.github.io/laestoque/](https://lucasweb2025.github.io/laestoque/)
 
-**Tela branca?** O build normal (`npm run build`) aponta assets para `/` — no Pages o app fica em `/laestoque/`. Use sempre:
+**Tela branca?** Quase sempre o GitHub está publicando a pasta **errada** (código com `/src/main.jsx` em vez do build). Confira:
+
+1. **Settings → Pages → Build and deployment**
+2. Source: **Deploy from a branch**
+3. Branch: **`gh-pages`** · Folder: **`/ (root)`** — **não** use `main`
+4. Salve e aguarde o workflow **Deploy GitHub Pages** (aba Actions, ~2 min)
+
+O workflow gera o build com `npm run build:pages` (base `/laestoque/`) e envia só a pasta `dist` para a branch `gh-pages`.
+
+Build local (se precisar testar):
 
 ```bash
 npm run build:pages
+npm run preview
 ```
-
-No repositório, o workflow `.github/workflows/deploy-pages.yml` faz isso automaticamente a cada push em `main`. Em **Settings → Pages**, fonte: **GitHub Actions** (não envie `dist` manual com `npm run build`).
 
 Rotas usam hash (`#/chegada`) para funcionar sem servidor.
 

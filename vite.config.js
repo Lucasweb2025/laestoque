@@ -5,7 +5,6 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
-  // demo: file:// / pasta local | pages: GitHub Pages em /laestoque/
-  base:
-    mode === 'demo' ? './' : mode === 'pages' ? '/laestoque/' : '/',
+  // demo: caminhos relativos para abrir dist/index.html pelo Explorer
+  base: mode === 'demo' ? './' : '/',
 }))
